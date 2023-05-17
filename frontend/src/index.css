@@ -1,0 +1,32 @@
+.btn {
+    width: 145px;
+    height: 30px;
+    border: 1px solid black;
+    border-radius: 25px;
+    background-color: white;
+    color: black;
+}
+.btn:hover {
+   background-color: black;
+   color: white;
+}
+.btn1 {
+    width: 235px;
+    height: 45px;
+    border: 1px solid white;
+    border-radius: 5px;
+    background-color: black;
+    color: white;
+    margin-top: 10px;
+    margin-left: 5px;
+}
+.btn3 {
+    background-color:black;
+    color: white;
+    
+  }
+  
+  .btn3:hover {
+    background-color:white;
+    color: black;
+  }
