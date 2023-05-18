@@ -10,13 +10,17 @@ const userSchema = new Schema({
         required: true
     },
     phoneNumber: {
-        type: Number,
-        required: true
+        type: String,
+        required: true,
     },
     email: {
         type: String,
         required: true,
         unique: true
+    },
+    password:{
+        type: String,
+        required: true
     },
     cart: [String],
     Wishlist: [String]
