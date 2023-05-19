@@ -6,6 +6,7 @@ import PickupPoint from './pages/admin/PickupPoint';
 import ProductDetails from './pages/users/ProductDetails';
 import Products from "./pages/admin/Products";
 import Register from "./pages/users/auth/Register";
+import Login from "./pages/users/auth/Login";
 
 function App  () {
 return(
@@ -18,6 +19,7 @@ return(
         <Route exact path= '/productdetails' element={<ProductDetails/>}/>
         <Route exact path= '/products' element ={<Products/>}/>
         <Route exact path='/register' element={<Register/>}/>
+        <Route exact path='/login'  element={<Login/>}/>
     </Routes>
     </BrowserRouter>
     </div>

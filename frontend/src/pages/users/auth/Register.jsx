@@ -1,64 +1,81 @@
-import React from "react";
+import React, {useState} from "react";
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
-import Container from 'react-bootstrap/Container';
-
+import publicApi from '../../../api/publicApi';
+import { useNavigate } from "react-router-dom";
 
 function Register(){
+    const navigate = useNavigate();
+    const [registerData, setRegisterData]= useState({firstName: '', lastName: '', email: '',
+ password: '', phoneNumber: ''})
+     const[errorMsg, setErrorMsg]= useState(null)
+ const register = async(e)=>{
+   e.preventDefault();
+   try{
+    const {data}=await publicApi.post('/register', registerData);
+    console.log(data)
+    if(data.message ==='User created successfully!'){
+     navigate('/login')
+    }
+   }catch(error){
+     setErrorMsg('Something went wrong, try again')
+   }
+   
+ }
+
 return(
     <div  className="bg-img">
-      <Container style={styles.cont}>
-        <div style={styles.forms}>
-      <h3>Register</h3>
-        <Form >
+        <div style={styles.cont}>
+        <Form onSubmit={register}>
+            <h3>Register</h3>
             <Row>
                <Col>
-                  <Form.Control placeholder="First name" />
+                  <Form.Control type="text" placeholder="First name" value={registerData.firstName}
+                  onChange={(e)=>{setRegisterData({...registerData, firstName: e.target.value})}} required/>
                     </Col>
                     <Col>
-                  <Form.Control placeholder="Last name" />
+                  <Form.Control type="text" placeholder="Last name" value={registerData.lastName}
+                  onChange={(e)=>{setRegisterData ({ ...registerData, lastName:e.target.value})}} required/>
                 </Col>
             </Row>
-        </Form>
-        <Form>
-        <Form.Group className="mb-3" controlId="formGroupEmail">
-            <Form.Label></Form.Label>
-            <Form.Control type="email" placeholder="Email" />
-        </Form.Group>
-        </Form>
-        <Form>
+        
+            <Form.Group className="mb-3" controlId="formGroupEmail">
+                <Form.Label></Form.Label>
+                <Form.Control type="email" placeholder="Email" value={registerData.email}
+                onChange={(e)=>{setRegisterData ({ ...registerData, email: e.target.value})}} required/>
+            </Form.Group>
+        
             <Row>
-               <Col>
-                <Form.Control placeholder="Password" />
-               </Col>
-               <Col>
-                <Form.Control placeholder="Phone Number" />
-               </Col>
+                <Col>
+                <Form.Control type="password" placeholder="Password" value={registerData.password}
+                onChange={(e)=>{setRegisterData ({ ...registerData, password: e.target.value})}} required/>
+                </Col>
+                <Col>
+                <Form.Control type="text" placeholder="Phone Number" value={registerData.phoneNumber}
+                onChange={(e)=>{setRegisterData({...registerData, phoneNumber: e.target.value})}} required/>
+                </Col>
             </Row>
+            <button style={styles.btn}>Submit</button>
+            { errorMsg ? <p style={styles.msg}>{errorMsg}</p> : null}
        </Form>
-       <button style={styles.btn}>Register</button>
-       </div>
-      </Container>
        
+       </div>
     </div>
 )
 }
 const styles={
-    home:{
-        // height: '100%'
-    },
     cont:{
         marginLeft: '450px',
         margin: '20px',
-        maxWidth: '400px',
+        maxWidth: '700px',
         backgroundColor: 'white',
         borderRadius: '5px',
-        minHeight: '260px'
-        // paddingTop: '30px'
+        minHeight: '270px',
+        padding: '10px'
     },
     btn:{
-        width: '360px',
+        width: '420px',
         height: '40px',
         backgroundColor: 'black',
         color: '#fff',
@@ -66,9 +83,11 @@ const styles={
         border: 'none',
         margin: '8px'
     },
-    forms:{
-        display: 'block'
+    msg:{
+        color: 'red',
+        fonstSize: '8px'
     }
+    
 }
 
 export default Register;

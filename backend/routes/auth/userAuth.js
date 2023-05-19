@@ -39,6 +39,39 @@ router.post('/register', (req,res)=>{
         message: error.message
      });
 }
-})
+});
+
+router.post('/login',async (req,res)=>{
+    console.log(req.body)
+    if(!req.body.email || !req.body.password){
+        res.send({
+            message:'Provide email and password!'
+        })
+    }
+    const user= await userModel.findOne({email: req.body.email})
+    if(!user){
+        res.send({
+            message: 'Wrong password or email!'
+        })
+    }else{
+    bcrypt.compare(req.body.password, user.password, (err, response)=>{
+        if(err){
+            console.log(err)
+        }
+        if(response === false){
+            res.send({
+                message: 'Wrong password or email!'
+            })
+        }else if(response === true){
+          const token= jwt.sign({userId: user._id}, 'MY_SECRET_KEY')
+            res.send({
+                message: 'User successfully authenticated!',
+                user: user,
+                token: token
+            })
+        }
+    })
+  }
+});
 
 export default router;
