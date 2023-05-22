@@ -57,7 +57,7 @@ const styles={
         margin: '8px'
     },
     txt:{
-        borderBottom:'0.3px solid black'
+        borderBottom:'0.5px solid gray'
     }
 }
 

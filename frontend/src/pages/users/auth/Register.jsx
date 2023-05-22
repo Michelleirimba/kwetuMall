@@ -28,7 +28,7 @@ return(
     <div  className="bg-img">
         <div style={styles.cont}>
         <Form onSubmit={register}>
-            <h3>Register</h3>
+            <h3 style={styles.text}>Register</h3>
             <Row>
                <Col>
                   <Form.Control type="text" placeholder="First name" value={registerData.firstName}
@@ -86,6 +86,9 @@ const styles={
     msg:{
         color: 'red',
         fonstSize: '8px'
+    },
+    text:{
+        borderBottom: '0.5px solid gray'
     }
     
 }
