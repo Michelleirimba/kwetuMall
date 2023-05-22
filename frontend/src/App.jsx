@@ -16,7 +16,7 @@ return(
         <Route exact path='/' element={<Home/>}/>
         <Route exact path= '/categories/home' element={<CategoryHome/>} />
         <Route exact path= '/pickuppoint' element={<PickupPoint/>}/>
-        <Route exact path= '/productdetails' element={<ProductDetails/>}/>
+        <Route exact path= '/productdetails/:id' element={<ProductDetails/>}/>
         <Route exact path= '/products' element ={<Products/>}/>
         <Route exact path='/register' element={<Register/>}/>
         <Route exact path='/login'  element={<Login/>}/>

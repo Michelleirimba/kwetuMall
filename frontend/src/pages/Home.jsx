@@ -5,8 +5,10 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import publicApi from '../api/publicApi';
+import { useNavigate } from 'react-router-dom';
 
 function Home() {
+  const navigate = useNavigate();
   const [products, setProducts]= useState([]);
   const backendUrl= import.meta.env.VITE_APP_BACKEND_URL
     const getProducts= async ()=>{
@@ -20,15 +22,15 @@ function Home() {
     },[]);
   return (
     <div>
+      <Container style={styles.img2}>
       <ShoppingCartIcon style={styles.icon} />
       <h1 style={styles.text}>Kwetumall</h1>
-      <Container style={styles.img2}>
         <img style={styles.img1} alt="clothing" src='Rectangle 52.png' />
         <Row xs={1} md={3} lg={4} className="g-4" style={styles.img2}>
           {
           products.map((product)=>{
             return(
-          <Col>
+          <Col key={product._id}>
             <Card style={styles.card}>
               <Card.Img style={styles.img} variant="top" src={backendUrl + product.image} />
               <Card.Body>
@@ -38,7 +40,7 @@ function Home() {
                 </Card.Text>
                 <div style={styles.text1}>
                   <div style={styles.text2}>Ksh {product.price}</div>
-                      <button className="btn">
+                      <button className="btn" onClick={()=> navigate(`/productdetails/${product._id}`)}>
                         View
                       </button>
                 </div>
@@ -58,7 +60,7 @@ const styles={
     color: 'black',
     fontWeight: '500',
     fontSize: 'medium',
-    marginLeft: '120px',
+    borderBottom: '1px solid gray'
  },
  img1:{
     width: '1115px'
@@ -69,13 +71,12 @@ const styles={
  },
  img2: {
    paddingTop: '20px',
-   marginTop: '-13px'
+   marginTop: '-13px',
  },
  icon:{
   height: '20px',
   width: '30px',
-  marginLeft: '112px',
-  marginTop: '10px'
+  marginTop: '8px'
  },
  text2:{
   fontWeight: '700'

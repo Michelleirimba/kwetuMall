@@ -2,9 +2,17 @@ import express from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import userModel from '../../models/userModel.js';
+import checkAuth from './Checkauth.js';
 
 const router= express.Router();
 const saltRound= 10
+
+router.get('/check/if/logged/in',checkAuth, (req, res)=>{
+    res.send({
+        message: `Hello, ${req.user.firstName} ${req.user.lastName}`,
+        data: req.user
+    })
+})
 
 router.post('/register', (req,res)=>{
     try
@@ -72,6 +80,34 @@ router.post('/login',async (req,res)=>{
         }
     })
   }
+});
+
+router.get('/', async(req, res)=>{
+    try{
+       const users= await userModel.find();
+       res.send({
+        message: 'Fetched all users successfully!',
+        data: users
+       })
+    }catch(error){
+        console.log(error);
+        res.send({
+        message: error.message
+     });
+    }
+});
+router.post('/delete/:id', async(req, res)=>{
+    try{
+       await userModel.deleteOne({_id:req.params.id})
+       res.send({
+        message: 'User deleted successfully!'
+       })
+    }catch(error){
+        console.log(error);
+        res.send({
+        message: error.message
+     });
+    }
 });
 
 export default router;

@@ -1,19 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ShoppingCartIcon  from '@mui/icons-material/ShoppingCart';
-
+import { useParams } from 'react-router-dom';
+import publicApi from '../../api/publicApi';
 
 function ProductDetails() {
-   const[number, setNumber]=useState(0)
+   const {id}= useParams();
+   const backendUrl =import.meta.env.VITE_APP_BACKEND_URL
+   const[product, setProduct] = useState({});
+   const getProduct= async ()=>{
+     const {data}= await publicApi.get(`/products/${id}`);
+     console.log(data);
+     setProduct(data.data);
+   }
+   const[number, setNumber]=useState(1)
    const addNum= ()=>{
       setNumber(number+1)
    }
    const minusNum= ()=>{
       setNumber(number-1)
    }
+   useEffect(()=>{
+      getProduct()
+   },[]);
      return(
       <div>
          <Container style={styles.cont}>
@@ -26,24 +38,25 @@ function ProductDetails() {
          </div>
             <Row>
                   <Col>
-                     <img style={styles.img1} alt='bag' src='Rectangle 58(3).png'/>
+                     <img style={styles.img1} alt='bag' src={backendUrl + product.image}/>
                       <div style={styles.imgs}>
-                           <img style={styles.img2} alt='bag1' src='Rectangle 62.png'/>
-                           <img style={styles.img2} alt='bag2' src='Rectangle 63.png'/>
-                           <img style={styles.img2} alt='bag3' src='Rectangle 64.png'/>
-                           <img style={styles.img2} alt='bag4' src='Rectangle 58(3).png'/>
+                        {
+                           product.images?
+                           product.images.map((image)=>{
+                              return(
+                               <img style={styles.img2} alt='bag1' src={backendUrl + image}/>
+                              )
+                           })
+                           :null
+                        }
+
                       </div>
                   </Col>
                   <Col>
                   
-                  <h3 style={styles.text2} >Laptop bag</h3>
+                  <h3 style={styles.text2}> {product.name} </h3>
                   <p style={styles.text3} >
-                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed placerat libero
-                      in semper rhoncus. Proin pretium ex sit amet ligula efficitur, sit amet consectetur
-                       leo condimentum. Donec nec bibendum leo. Praesent auctor massa sit amet tortor
-                        imperdiet, vel mattis nisi accumsan. Nunc est tortor, euismod eu euismod euismod,
-                         eleifend nec lorem. Phasellus et eleifend elit. Vivamus vitae tellus ac nibh 
-                         interdum placerat. Fusce vel vehicula urna.
+                     {product.description}
                   </p>
                   <div style={styles.btn1}>
                      <div style={styles.btn3}>
@@ -51,7 +64,7 @@ function ProductDetails() {
                         <p>{number}</p>
                         <button style={styles.btn2} onClick={minusNum}>-</button>
                     </div>
-                  <p style={styles.price}>Ksh 1,500</p>
+                  <p style={styles.price}>Ksh {product.price * number}</p>
                   </div>
                   <button style={styles.btn4}>Add to cart</button>
                   </Col>
