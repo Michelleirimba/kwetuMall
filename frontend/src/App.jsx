@@ -7,6 +7,7 @@ import ProductDetails from './pages/users/ProductDetails';
 import Products from "./pages/admin/Products";
 import Register from "./pages/users/auth/Register";
 import Login from "./pages/users/auth/Login";
+import CartDetails from "./pages/users/CartDetails";
 
 function App  () {
 return(
@@ -20,6 +21,7 @@ return(
         <Route exact path= '/products' element ={<Products/>}/>
         <Route exact path='/register' element={<Register/>}/>
         <Route exact path='/login'  element={<Login/>}/>
+        <Route exact path='/cart'  element={<CartDetails/>}/>
     </Routes>
     </BrowserRouter>
     </div>

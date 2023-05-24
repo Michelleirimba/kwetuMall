@@ -16,7 +16,7 @@ router.post('/register', (req, res)=>{
         bcrypt.hash(req.body.password, saltRound, async(err, hash)=>{ 
           if(err){
             console.log(err)
-          }
+          }  
           const newAdmin =new adminModel({
             firstName: req.body.firstName ,
             lastName: req.body.lastName,

@@ -9,6 +9,7 @@ import cors from 'cors';
 import productRoutes from './routes/productRoutes.js';
 import userAuth from './routes/auth/userAuth.js';
 import adminAuth from './routes/auth/adminAuth.js';
+import cartRoutes from './routes/cartRoutes.js';
 
 const app = express();
 const PORT = 5000;
@@ -28,6 +29,7 @@ app.use('/pickupPoints', pickupPointRoutes);
 app.use('/products', productRoutes);
 app.use('/', userAuth);
 app.use('/admin', adminAuth);
+app.use('/cart', cartRoutes);  
 
 
 app.listen(PORT, ()=>{

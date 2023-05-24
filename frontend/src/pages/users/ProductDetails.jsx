@@ -2,19 +2,37 @@ import React, { useState,useEffect } from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import ShoppingCartIcon  from '@mui/icons-material/ShoppingCart';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import publicApi from '../../api/publicApi';
+import privateApi from '../../api/privateApi';
+import Cookies from 'js-cookie';
+import Navbar from '../admin/Navbar';
 
 function ProductDetails() {
    const {id}= useParams();
+   const navigate= useNavigate();
    const backendUrl =import.meta.env.VITE_APP_BACKEND_URL
    const[product, setProduct] = useState({});
+   const[err, setErr] = useState(null)
    const getProduct= async ()=>{
      const {data}= await publicApi.get(`/products/${id}`);
      console.log(data);
      setProduct(data.data);
+   }
+   const addToCart= async()=>{
+      if(number < 1){
+         // alert("You must add atleast one item!");
+         setErr("You must add atleast one item!")
+      }
+      const token = Cookies.get('token');
+      if(!token){
+         setErr("You must be logged in!")
+      }
+      const {data}= await privateApi.post(`/cart/add/${product._id}`, {number: number})
+      console.log(data);
+      if(data.message === "Product added successfully!"){
+         navigate('/cart')
+      }
    }
    const[number, setNumber]=useState(1)
    const addNum= ()=>{
@@ -29,22 +47,16 @@ function ProductDetails() {
      return(
       <div>
          <Container style={styles.cont}>
-           <div style={styles.navBar}>
-               <h2 style={styles.text1}>Kwetumall</h2>
-               <div style={styles.icon}>
-               <AccountCircleIcon/>
-               <ShoppingCartIcon/>
-            </div>
-         </div>
+           <Navbar/>
             <Row>
                   <Col>
-                     <img style={styles.img1} alt='bag' src={backendUrl + product.image}/>
+                     <img style={styles.img1} alt='item' src={backendUrl + product.image}/>
                       <div style={styles.imgs}>
                         {
                            product.images?
                            product.images.map((image)=>{
                               return(
-                               <img style={styles.img2} alt='bag1' src={backendUrl + image}/>
+                               <img style={styles.img2} alt='items' src={backendUrl + image}/>
                               )
                            })
                            :null
@@ -66,7 +78,8 @@ function ProductDetails() {
                     </div>
                   <p style={styles.price}>Ksh {product.price * number}</p>
                   </div>
-                  <button style={styles.btn4}>Add to cart</button>
+                  <button onClick={addToCart} style={styles.btn4}>Add to cart</button>
+                  {err? <p>{err}</p> : null}
                   </Col>
             </Row>
          </Container>
@@ -99,6 +112,7 @@ const styles={
    img1:{
       height: '400px',
       width: '500px',
+      marginTop: '5px'
    },
    imgs:{
       display: 'flex',

@@ -22,7 +22,7 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
-    cart: [String],
+    cart: [Object],
     Wishlist: [String]
 });
 

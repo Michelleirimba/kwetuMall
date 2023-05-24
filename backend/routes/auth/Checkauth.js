@@ -16,7 +16,7 @@ const checkAuth= (req, res, next)=>{
                 error: err.message
             })
         }
-       const{ userId } =data;
+       const { userId } =data;
        const user = await userModel.findOne({_id: userId});
        req.user= user;
        next();
