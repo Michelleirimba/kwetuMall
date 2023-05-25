@@ -3,7 +3,7 @@ import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import Navbar from './admin/Navbar';
 import publicApi from '../api/publicApi';
 import { useNavigate } from 'react-router-dom';
 
@@ -23,8 +23,7 @@ function Home() {
   return (
     <div>
       <Container style={styles.img2}>
-      <ShoppingCartIcon style={styles.icon} />
-      <h1 style={styles.text}>Kwetumall</h1>
+      <Navbar/>
         <img style={styles.img1} alt="clothing" src='Rectangle 52.png' />
         <Row xs={1} md={3} lg={4} className="g-4" style={styles.img2}>
           {
@@ -63,11 +62,13 @@ const styles={
     borderBottom: '1px solid gray'
  },
  img1:{
-    width: '1115px'
+    width: '1115px',
+    marginTop: '5px'
  },
  text1:{
   display: 'flex',
-  justifyContent: 'space-between'
+  justifyContent: 'space-between',
+  alignItems: 'center'
  },
  img2: {
    paddingTop: '20px',

@@ -62,6 +62,14 @@ router.post('/delete/:id',CheckAuth, async(req, res)=>{
         data: newCart
     })
 
+});
+
+router.get('/items/count',CheckAuth, (req,res)=>{
+    const cart = req.user.cart;
+    res.send({
+        message: 'Found total items in cart',
+        number: cart.length
+    })
 })
 
 export default router;

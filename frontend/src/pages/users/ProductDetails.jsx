@@ -56,7 +56,7 @@ function ProductDetails() {
                            product.images?
                            product.images.map((image)=>{
                               return(
-                               <img style={styles.img2} alt='items' src={backendUrl + image}/>
+                               <img key={image} style={styles.img2} alt='items' src={backendUrl + image}/>
                               )
                            })
                            :null

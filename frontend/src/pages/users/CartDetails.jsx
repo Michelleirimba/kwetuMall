@@ -6,6 +6,7 @@ import Navbar from '../admin/Navbar';
 import DeleteIcon from '@mui/icons-material/Delete';
 import privateApi from '../../api/privateApi';
 import { useParams } from 'react-router-dom';
+import Checkout from '../../components/CheckoutModal';
 
 function CartDetails () {
     const {id}= useParams();
@@ -46,7 +47,7 @@ function CartDetails () {
                 {
                     cart.map((dta)=>{
                         return(
-                       <Row >
+                       <Row key={dta} >
                           <Col style={styles.row}> 
                             <img style={styles.img} src={backendUrl + dta.product.image}/>
                             <p style={styles.text}>{dta.product.name}</p>
@@ -59,6 +60,7 @@ function CartDetails () {
                     })
                 }
                 <p style={styles.price}>Total: Ksh{getTotal()}</p>
+                <Checkout/>
           </Container>
         </div>
     )
