@@ -22,7 +22,7 @@ router.post('/add/:id', CheckAuth, async(req, res)=>{
        }else if( inCart === false){
         user.cart = [...user.cart, {productId: productId, number: req.body.number}]
         let result = await user.save();
-        res.send({
+        res.send({  
             message: 'Product added successfully!',
             data: result
         })
@@ -70,6 +70,28 @@ router.get('/items/count',CheckAuth, (req,res)=>{
         message: 'Found total items in cart',
         number: cart.length
     })
-})
+});
+
+router.post('/clear', CheckAuth, async(req,res)=>{
+    try {
+        let cart = req.body;
+        for(let i=0; i<cart.length; i++){
+            const product = await productModel.findOne({_id : cart[i].product._id});
+            product.stock = product.stock - cart[i].number;
+            await product.save()
+        }
+        const user = await userModel.findOne({_id:req.user._id});
+        user.cart = [];
+        const result = await user.save(); 
+        res.send({
+            message: 'Checked out successfully!',
+            data: result
+        })
+    } catch (error) {
+        res.send({
+            message: error.message
+        })
+    }
+});
 
 export default router;

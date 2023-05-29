@@ -60,7 +60,7 @@ function CartDetails () {
                     })
                 }
                 <p style={styles.price}>Total: Ksh{getTotal()}</p>
-                <Checkout/>
+                <Checkout cart={cart}/>
           </Container>
         </div>
     )
