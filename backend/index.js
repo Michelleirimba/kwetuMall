@@ -10,6 +10,7 @@ import productRoutes from './routes/productRoutes.js';
 import userAuth from './routes/auth/userAuth.js';
 import adminAuth from './routes/auth/adminAuth.js';
 import cartRoutes from './routes/cartRoutes.js';
+import userRoutes from './routes/userRoutes.js';
 
 const app = express();
 const PORT = 5000;
@@ -29,7 +30,8 @@ app.use('/pickupPoints', pickupPointRoutes);
 app.use('/products', productRoutes);
 app.use('/', userAuth);
 app.use('/admin', adminAuth);
-app.use('/cart', cartRoutes);  
+app.use('/cart', cartRoutes); 
+app.use('/users',userRoutes); 
 
 
 app.listen(PORT, ()=>{

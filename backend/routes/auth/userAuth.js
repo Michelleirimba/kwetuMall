@@ -15,38 +15,45 @@ router.get('/check/if/logged/in',checkAuth, (req, res)=>{
 })
 
 router.post('/register', (req,res)=>{
-    try
-    {console.log(req.body)
-    if(!req.body || !req.body.password){
-        res.send({
-            message: 'User details not found'
+    try{
+        console.log(req.body)
+        if(!req.body || !req.body.password){
+            res.send({
+                message: 'User details not found'
+            })
+        }  
+        bcrypt.hash(req.body.password, saltRound, async(err, hash)=>{
+            if(err){
+            console.log(err);
+            }
+            try {
+                const newUser=new userModel({
+                    firstName:req.body.firstName,
+                    lastName:req.body.lastName,
+                    phoneNumber:req.body.phoneNumber,
+                    email:req.body.email,
+                    password:hash
+                });
+                const user= await newUser.save();
+                const token= jwt.sign({userId: user._id}, 'MY_SECRET_KEY')
+                res.send({
+                    message: 'User created successfully!',
+                    user: user,
+                    token: token
+                })
+            } catch (error) {
+                console.log(error);
+                res.send({
+                    message: error.message
+                });
+            }
         })
-    }  
-    bcrypt.hash(req.body.password, saltRound, async(err, hash)=>{
-        if(err){
-        console.log(err);
-        }
-        const newUser=new userModel({
-            firstName:req.body.firstName,
-            lastName:req.body.lastName,
-            phoneNumber:req.body.phoneNumber,
-            email:req.body.email,
-            password:hash
+    }catch(error){
+        console.log(error);
+        res.send({
+            message: error.message
         });
-        const user= await newUser.save();
-        const token= jwt.sign({userId: user._id}, 'MY_SECRET_KEY')
-        res.send({
-            message: 'User created successfully!',
-            user: user,
-            token: token
-        })
-    })
-}catch(error){
-    console.log(error);
-     res.send({
-        message: error.message
-     });
-}
+    }
 });
 
 router.post('/login',async (req,res)=>{
@@ -82,32 +89,6 @@ router.post('/login',async (req,res)=>{
   }
 });
 
-router.get('/', async(req, res)=>{
-    try{
-       const users= await userModel.find();
-       res.send({
-        message: 'Fetched all users successfully!',
-        data: users
-       })
-    }catch(error){
-        console.log(error);
-        res.send({
-        message: error.message
-     });
-    }
-});
-router.post('/delete/:id', async(req, res)=>{
-    try{
-       await userModel.deleteOne({_id:req.params.id})
-       res.send({
-        message: 'User deleted successfully!'
-       })
-    }catch(error){
-        console.log(error);
-        res.send({
-        message: error.message
-     });
-    }
-});
+
 
 export default router;

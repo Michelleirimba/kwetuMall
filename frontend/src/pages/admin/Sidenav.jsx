@@ -1,15 +1,21 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function Sidenav(){
+    const navigate = useNavigate()
     return(
         <div style={styles.cont}>
             <h4 style={styles.heading}>KwetuMall <br/> Admin Panel</h4>
             <div style={styles.dflex}>
             <div>
-                <button className='btn1 btn3'>Products</button>
-                <button className='btn1 btn3'>Categories</button>
-                <button className='btn1 btn3'>Pickup Points</button>
-                <button className='btn1 btn3'>Users</button>
+                <button onClick={()=> navigate('/admin/products')} className='btn1 btn3'>Products
+                </button>
+                <button onClick={()=> navigate('/admin/categories')} className='btn1 btn3'>Categories
+                </button>
+                <button onClick={()=> navigate('/admin/pickuppoints')} className='btn1 btn3'>Pickup Points
+                </button>
+                <button onClick={()=> navigate('/admin/users')} className='btn1 btn3'>Users
+                </button>
                 <button className='btn1 btn3'>Admins</button>
             </div>
             <div>
