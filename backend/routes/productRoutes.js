@@ -49,6 +49,7 @@ router.post('/create',uploadProductImages,async (req, res)=>{
         name: req.body.name,
         image:  singleImageFileName,
         images: renamedImages,
+        buyingPrice: req.body.buyingPrice,
         price: req.body.price,
         stock: req.body.stock,
         category: req.body.category,
@@ -66,7 +67,30 @@ router.post('/create',uploadProductImages,async (req, res)=>{
             message: error.message
         });
     }
-} )
+});
+
+router.post('/update/:id', async(req,res)=>{
+    try {
+        const id = req.params.id;
+        const product = await productModel.findOne({_id:id})
+        product.name= req.body.name,
+        product.buyingPrice= req.body.buyingPrice,
+        product.price= req.body.price,
+        product.stock= req.body.stock,
+        product.category= req.body.category,
+        product.description= req.body.description
+        const result = await product.save();
+        res.send({
+            message: 'Product updated successfully!',
+            data: result
+        })
+    } catch (error) {
+        console.log(error);
+        res.send({
+            message: error.message 
+        });
+    }
+})
 
 router.get('/:id', async (req, res)=>{
     try{

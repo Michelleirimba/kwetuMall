@@ -39,7 +39,7 @@ const AddProductModal = ( {productData, setProductData, createProduct})=> {
   
         <Modal show={show} onHide={handleClose}>
               <Modal.Header closeButton>
-              <Modal.Title>products</Modal.Title>
+              <Modal.Title>Add Product</Modal.Title>
               </Modal.Header>
               <Modal.Body>
               <Form onSubmit={createProduct}>
@@ -62,7 +62,14 @@ const AddProductModal = ( {productData, setProductData, createProduct})=> {
                     onChange={(e)=> saveFiles(e)}/>
                     </Col>
                     <Col>
-                    <Form.Label>Price</Form.Label>
+                    <Form.Label>Buying Price</Form.Label>
+                    <Form.Control type='number' value={productData.buyingPrice}
+                     onChange={(e)=> setProductData({...productData, buyingPrice:e.target.value})}/>
+                    </Col>
+                </Row>
+                <Row>
+                <Col>
+                    <Form.Label>Selling Price</Form.Label>
                     <Form.Control type='number' value={productData.price}
                      onChange={(e)=> setProductData({...productData, price:e.target.value})}/>
                     </Col>

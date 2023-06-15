@@ -5,12 +5,13 @@ import Table from 'react-bootstrap/Table';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AddProductModal from '../../components/AddProductsModal';
+import EditProductsModal from '../../components/EditProductsModal';
 
 function Products(){
     const [products, setProducts]= useState ([]);
     const backendUrl= import.meta.env.VITE_APP_BACKEND_URL
     const [productData, setProductData] = useState({
-        name:'', image: '', images:[], price:'', stock:'', description:'', category:[]
+        name:'', image: '', images:[],buyingPrice:'', price:'', stock:'', description:'', category:[]
     })
        const getProducts= async ()=>{
        const{data}=  await publicApi.get('/products/')
@@ -26,6 +27,7 @@ function Products(){
        for(let i=0;  i<productData.images.length; i++){
         formData.append('images', productData.images[i])
        }
+       formData.append('buyingPrice', productData.buyingPrice);
         formData.append('price', productData.price);
         formData.append('stock', productData.stock);
         formData.append('description', productData.description);
@@ -36,9 +38,24 @@ function Products(){
            const{data}= await publicApi.post('/products/create', formData);
            console.log(data)
         if(data.message=== 'Product created successfully!'){
-            setProducts([...productData, data.data])
+            setProducts([...products, data.data])
         }
-       }
+       };
+
+       const updateProduct= async(e)=>{
+        e.preventDefault();
+        const {data}= await publicApi.post(`/products/update/${productData.id}`, productData)
+        console.log(data)
+        if(data.message === "Product updated succesfully!"){
+            setProducts(products.map((product)=>{
+                if(productData.id ===product._id){
+                    return data.data;
+                }else{
+                    return product;
+                }
+            }))
+        }
+    }
 
        const deleteProduct= async(id)=>{
         const {data}= await publicApi.post(`/products/delete/${id}`)
@@ -86,7 +103,18 @@ function Products(){
                 <td>{product.description.substring(0,20)}...</td>
                 <td>{product.category}</td>
                 <td>
-                    <EditIcon/>
+                    <EditProductsModal
+                     id={product._id}
+                     name={product.name}
+                     buyingPrice={product.buyingPrice}
+                     price={product.price}
+                     stock={product.stock}
+                     category={product.category}
+                     description={product.description}
+                      updateProduct={updateProduct}
+                      productData ={productData}
+                      setProductData ={setProductData}
+                    />
                     <DeleteIcon onClick={()=> deleteProduct(product._id)}/>
                 </td>
                 </tr>

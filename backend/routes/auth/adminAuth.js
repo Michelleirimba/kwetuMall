@@ -25,7 +25,7 @@ router.post('/register', (req, res)=>{
             password: hash
           });
           const admin= await newAdmin.save();
-          const token= jwt.sign({adminId: admin._id}, 'MY_SECRET-KEY')
+          const token= jwt.sign({adminId: admin._id}, 'MY_SECRET-KEY')  
           res.send({
             message: 'Admin created successfully!',
             admin: admin,
@@ -39,6 +39,39 @@ router.post('/register', (req, res)=>{
         message: error.message
      });
     }
-})
+});
+
+router.post('/login',async (req,res)=>{
+  console.log(req.body)
+  if(!req.body.email || !req.body.password){
+      res.send({
+          message:'Provide email and password!'
+      })
+  }
+  const admin= await adminModel.findOne({email: req.body.email})
+  if(!admin){
+      res.send({
+          message: 'Wrong password or email!'
+      })
+  }else{
+  bcrypt.compare(req.body.password, admin.password, (err, response)=>{
+      if(err){
+          console.log(err)
+      }
+      if(response === false){
+          res.send({
+              message: 'Wrong password or email!'
+          })
+      }else if(response === true){
+        const token= jwt.sign({adminId:admin._id}, 'MY_SECRET_KEY')
+          res.send({
+              message: 'Admin successfully authenticated!', 
+              admin: admin,
+              token: token
+          })
+      }
+  })
+}
+});
  
 export default router;

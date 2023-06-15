@@ -24,7 +24,7 @@ function Navbar () {
         <div style={styles.navBar}>
            <h2 style={styles.text1} onClick={()=>{navigate('/')}}>Kwetumall</h2>
                <div style={styles.icon}>
-                    <AccountCircleIcon/>
+                    <AccountCircleIcon onClick={()=>{navigate('/myaccount')}}/>
                     <ShoppingCartIcon style={styles.icon2} onClick={()=>{navigate('/cart')}}/>
                     <p style={styles.num}>{count}</p>
                </div>

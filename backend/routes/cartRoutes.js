@@ -2,8 +2,9 @@ import express from 'express';
 import userModel from '../models/userModel.js';
 import CheckAuth from './auth/Checkauth.js';
 import productModel from '../models/productModel.js';
+import salesModel from '../models/salesModel.js';
 
-const router =express.Router();
+const router =express.Router(); 
 
 router.post('/add/:id', CheckAuth, async(req, res)=>{
        let productId = req.params.id;
@@ -75,12 +76,20 @@ router.get('/items/count',CheckAuth, (req,res)=>{
 router.post('/clear', CheckAuth, async(req,res)=>{
     try {
         let cart = req.body;
+        const user = await userModel.findOne({_id:req.user._id});
         for(let i=0; i<cart.length; i++){
             const product = await productModel.findOne({_id : cart[i].product._id});
             product.stock = product.stock - cart[i].number;
-            await product.save()
+            await product.save();
+            const newSale = new salesModel({
+               productId : product._id,
+               userId : user._id,
+               buyingPrice : product.buyingPrice * cart[i].number,
+               sellingPrice: product.price * cart[i].number
+            }) 
+          await newSale.save();
         }
-        const user = await userModel.findOne({_id:req.user._id});
+        
         user.cart = [];
         const result = await user.save(); 
         res.send({
